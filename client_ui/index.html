@@ -1,20 +1,19 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Client</title>
-    <link rel="stylesheet" href="./css/styles.css">
-  </head>
-  <body>
+<!DOCTYPE html>
+<html ng-app="ClientApp">
 
-    <div>You are client!</div>
+<head>
+  <meta charset="utf-8">
+  <title>Интерфейс клиента</title>
+  <script src="./node_modules/angular/angular.js"></script>
+</head>
 
-    <form action="/">
-      <input type="text" name="login" placeholder="Your name"/>
-      <input type="text" name="email" placeholder="Your email"/>
-      <input type="submit" value="Send"/>
-    </form>
+<body>
 
-    <script src="./js/socket.io.js"></script>
-    <script src="./js/main.js"></script>
-  </body>
+  <user></user>
+
+  <script src="src/ClientApp.js"></script>
+  <script src="src/User/UserComponent.js"></script>
+
+</body>
+
 </html>
