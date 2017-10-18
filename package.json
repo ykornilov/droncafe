@@ -1,0 +1,12 @@
+{
+  "name": "droncafe",
+  "version": "1.0.0",
+  "description": "exam in the course ND-7",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "ykornilov",
+  "license": "ISC"
+}

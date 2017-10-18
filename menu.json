@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Classic Ribeye",
+    "cost": 32
+  },
+  {
+    "title": "Steak Fajitas",
+    "cost": 40
+  },
+  {
+    "title": "Chicken Enchiladas",
+    "cost": 17
+  },
+  {
+    "title": "Sunrise Burger",
+    "cost": 25
+  },
+  {
+    "title": "Black Water",
+    "cost": 8
+  }
+]
