@@ -11,21 +11,21 @@ const clientApp =
                         templateUrl: 'src/views/main.html'
                     })
                     .when('/menu', {
-                        template: '<b>Menu</b>'
+                        templateUrl: 'src/views/menu.html'
                     })
                     .otherwise({
                         redirectTo: '/'
                     });
         })
         .controller('ClientCtrl', $scope => {
-            $scope.menu = null;
+            $scope.user = null;
             $scope.balance = 0;
 
             $scope.$on('balance', (event, data) => {
                 $scope.balance = data;
             });
 
-            $scope.$on('menu', (event, data) => {
-                $scope.menu = data;
+            $scope.$on('auth', (event, data) => {
+                $scope.user = data;
             });
         });

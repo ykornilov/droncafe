@@ -1,12 +1,12 @@
-<form ng-if="!auth">
-    <input type="text" name="name" placeholder="Your name" ng-model="user.name"/>
-    <input type="text" name="email" placeholder="Your email" ng-model="user.email"/>
-    <button ng-click="authUser(user)">Login</button>
+<form ng-if="!$parent.user">
+    <input type="text" name="name" placeholder="Your name" ng-model="$parent.user.name"/>
+    <input type="text" name="email" placeholder="Your email" ng-model="$parent.user.email"/>
+    <button ng-click="authUser($parent.user)">Login</button>
 </form>
 
-<div ng-if="auth">
-    {{ user.name }}
-    {{ user.email }}
+<div ng-if="$parent.user">
+    {{ $parent.user.name }}
+    {{ $parent.user.email }}
     <button ng-click="incBalance()">Пополнить</button>
 </div>
 {{ $parent.balance }}
