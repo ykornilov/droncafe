@@ -6,12 +6,13 @@
   <title>Интерфейс клиента</title>
   <script src="./js/socket.io.js"></script>
   <script src="./node_modules/angular/angular.js"></script>
+  <script src="./node_modules/angular-route/angular-route.js"></script>
   <script src="./bower_components/angular-socket-io/socket.js"></script>
 </head>
 
-<body>
+<body ng-controller="ClientCtrl">
 
-  <user></user>
+  <ng-view></ng-view>
 
   <script src="src/ClientApp.js"></script>
   <script src="src/UserService/UserService.js"></script>

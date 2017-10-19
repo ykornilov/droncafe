@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs');
-const path = './menu.json';
+const path = './app/src/menu.json';
 
 function read() {
     return new Promise((resolve, reject) => {

@@ -1,5 +1,4 @@
-//const menu = require('./menu');
-const menu = require('./src/menu');
+const menu = require('./app/src/menu');
 
 //menu.read()
 //    .then(console.log);
@@ -11,8 +10,6 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
-
-const Client = require('./app/models/client');
 
 // Routing
 app.use('/client', express.static('client_ui'));
@@ -29,34 +26,53 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
     .then(db => {
         console.log('Connected to database');
 
-        const client = {
-            name: 'Ivan',
-            email: 'ivan@ivan.ru'
-        };
+        const ClientSchema = require('./app/models/client');
+        const Client = mongoose.model('Client', ClientSchema);
 
-        Client.findOneAndUpdate({
-                    email: client.email
-                }, {
-                    $set: {name: client.name},
-                    $setOnInsert: {email: client.email}
-                }, {
-                    upsert: true,
-                    setDefaultsOnInsert: true
-                })
-            .exec()
-            .then(res => {
-                console.log("got any results");
-                console.log(res);
-            })
-            .catch(console.log);
 
         user.on('connection', socket => {
             console.log('a client connection');
 
-            socket.on('login', user => {
-                console.log(user);
-                socket.emit('auth');
+            socket.on('login', client => {
+                if (client.email === null) {
+                    return;
+                }
+                Client.findOneAndUpdate({
+                        email: client.email
+                    }, {
+                        $set: {name: client.name},
+                        $setOnInsert: {email: client.email}
+                    }, {
+                        upsert: true,
+                        setDefaultsOnInsert: true
+                    })
+                    .exec()
+                    .then(() => Client.findOne({email: client.email}))
+                    .then(res => {
+                        socket.user = res;
+                        socket.emit('auth', res);
+                    })
+                    .catch(console.log);
             });
+
+            socket.on('incBalance', () => {
+                Client.findOne({ email: socket.user.email })
+                    .exec()
+                    .then(client => {
+                        client.balance += 100;
+                        return client.save();
+                    })
+                    .then(res => socket.emit('changeBalance', res.balance))
+                    .catch(console.log);
+            });
+
+            socket.on('getMenu', () => {
+                menu.read()
+                    .then(res => {
+                        socket.emit('menu', res);
+                    })
+                    .catch(console.log);
+            })
         });
 
         cook.on('connection', socket => {
@@ -69,5 +85,6 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
 server.listen(port, function() {
     console.log(`listening on port: ${server.address().port}`);
 });
+
 
 

@@ -1,8 +1,12 @@
 document.addEventListener('DOMContentLoaded', ()=> {
 	const socket = io('/client');
 
-	socket.on('auth', () => {
+	socket.on('auth', data => {
+		console.log(data);
 		document.querySelector('form').style.display = 'none';
+	});
+	socket.on('menu', (data) => {
+		console.log(data);
 	});
 
 	document.querySelector('form').addEventListener('submit', event => {
