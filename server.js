@@ -72,7 +72,18 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
                         socket.emit('menu', res);
                     })
                     .catch(console.log);
-            })
+            });
+
+            socket.on('addOrder', dish => {
+                Client.findOne({ email: socket.user.email })
+                    .exec()
+                    .then(client => {
+                        client.balance -= dish.cost;
+                        return client.save();
+                    })
+                    .then(res => socket.emit('changeBalance', res.balance))
+                    .catch(console.log);
+            });
         });
 
         cook.on('connection', socket => {

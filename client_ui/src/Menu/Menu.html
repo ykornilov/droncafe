@@ -1,1 +1,8 @@
-{{ $parent.balance }}
+<ul ng-if="common.user">
+    <li ng-repeat="dish in menu">
+        <h3>{{ dish.title }}</h3>
+        <p>{{ dish.cost }}</p>
+        <button ng-if="dish.cost <= common.balance" ng-click="addOrder(dish)">Заказать</button>
+        <p ng-if="dish.cost > common.balance">Пополните баланс на {{ dish.cost - common.balance }}</p>
+    </li>
+</ul>

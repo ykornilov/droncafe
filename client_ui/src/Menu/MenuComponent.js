@@ -4,6 +4,11 @@ clientApp.component('menu', {
 
     controller: function MenuCtrl($scope, socket) {
         $scope.menu = [];
+        $scope.common = $scope.$parent.common;
+
+        $scope.addOrder = function(dish) {
+            socket.emit('addOrder', dish);
+        };
 
         socket.emit('getMenu');
 

@@ -3,6 +3,8 @@
 clientApp.component('user', {
 
     controller: function UserCtrl($scope, socket) {
+        $scope.common = $scope.$parent.common;
+        $scope.user = null;
 
         $scope.authUser = function(user) {
             socket.emit('login', {

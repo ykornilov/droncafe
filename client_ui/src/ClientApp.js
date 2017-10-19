@@ -18,14 +18,15 @@ const clientApp =
                     });
         })
         .controller('ClientCtrl', $scope => {
-            $scope.user = null;
-            $scope.balance = 0;
+            $scope.common = {};
+            $scope.common.balance = 0;
+            $scope.common.user = null;
 
             $scope.$on('balance', (event, data) => {
-                $scope.balance = data;
+                $scope.common.balance = parseInt(data);
             });
 
             $scope.$on('auth', (event, data) => {
-                $scope.user = data;
+                $scope.common.user = data;
             });
         });
