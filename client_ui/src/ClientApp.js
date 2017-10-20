@@ -17,7 +17,7 @@ const clientApp =
                         redirectTo: '/'
                     });
         })
-        .controller('ClientCtrl', $scope => {
+        .controller('MainCtrl', $scope => {
             $scope.common = {};
             $scope.common.balance = 0;
             $scope.common.user = null;

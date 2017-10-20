@@ -1,0 +1,6 @@
+<ul>
+    <li ng-repeat="order in common.orders | filter: {status: 1}">
+        <h3>{{ order.title }}</h3>
+        <button ng-click="readyDish(order)">Готовить</button>
+    </li>
+</ul>

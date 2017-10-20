@@ -16,7 +16,7 @@ app.use('/client', express.static('client_ui'));
 app.use('/kitchen', express.static('cook_ui'));
 
 // Define namespaces for klient_ui and cook_ui
-const nscook = io.of('/kitchen');
+const nskitchen = io.of('/kitchen');
 const nsclient = io.of('/client');
 
 mongoose.connect('mongodb://localhost:27017/droncafe', {
@@ -87,12 +87,6 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
             });
 
             socket.on('newOrder', dish => {
-                //nsclient.clients((error, clients) => {
-                //    if (error) throw error;
-                //    const user = nsclient.connected[clients[0]].user;
-                //    console.log(user);
-                //    nsclient.to(clients[0]).emit('changeBalance', 100);
-                //});
 
                 Dish.create({
                         title: dish.title,
@@ -110,8 +104,41 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
             });
         });
 
-        nscook.on('connection', socket => {
+        nskitchen.on('connection', socket => {
             console.log('a cook connection');
+
+            socket.on('getOrders', () => {
+                Dish.find({})
+                    .exec()
+                    .then(res => socket.emit('orders', res))
+                    .catch(console.log);
+            });
+
+            socket.on('changeStatusOrder', ({order, status}) => {
+                Dish.findOne({ _id: new mongoose.Types.ObjectId(order._id) })
+                    .exec()
+                    .then(dish => {
+                        dish.status = status;
+                        return dish.save();
+                    })
+                    .then(res => {
+                        nskitchen.clients((error, clients) => {
+                            if (error) throw error;
+                            clients.forEach(client => nskitchen.to(client).emit('order', res));
+                        });
+                        return res;
+                    })
+                    .then(res => {
+                        nsclient.clients((error, clients) => {
+                            if (error) throw error;
+                            const client = clients.find(client => nsclient.connected[client].user._id.toString() === res.client_id.toString());
+                            if (client) {
+                                nsclient.to(client).emit('order', res);
+                            }
+                        });
+                    })
+                    .catch(console.log);
+            });
         });
 
     })

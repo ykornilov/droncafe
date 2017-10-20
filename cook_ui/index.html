@@ -1,14 +1,25 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Cook</title>
-    <link rel="stylesheet" href="./css/styles.css">
-  </head>
-  <body>
+<!DOCTYPE html>
+<html ng-app="CookApp">
 
-    <div>You are cook!</div>
+<head>
+  <meta charset="utf-8">
+  <title>Интерфейс повара</title>
+  <script src="./js/socket.io.js"></script>
+  <script src="./node_modules/angular/angular.js"></script>
+  <script src="./bower_components/angular-socket-io/socket.js"></script>
+</head>
 
-    <script src="./js/socket.io.js"></script>
-    <script src="./js/main.js"></script>
-  </body>
+<body ng-controller="MainCtrl">
+
+<new-orders></new-orders>
+<hr/>
+<cooking-orders></cooking-orders>
+
+<script src="src/CookApp.js"></script>
+<script src="src/CookService/CookService.js"></script>
+<script src="src/NewOrders/NewOrdersComponent.js"></script>
+<script src="src/CookingOrders/CookingOrdersComponent.js"></script>
+
+</body>
+
 </html>

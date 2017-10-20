@@ -12,11 +12,17 @@ clientApp.component('orders', {
 
         $scope.$on('userReady', (event, data) => {
             socket.emit('getOrders');
-            console.log('getOrders');
         });
 
         socket.on('orders', data => {
             $scope.orders = data;
+        });
+
+        socket.on('order', data => {
+            const dish = $scope.orders.find(item => item._id === data._id);
+            if (dish) {
+                dish.status = data.status;
+            }
         });
     },
 

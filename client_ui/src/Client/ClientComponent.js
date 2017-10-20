@@ -1,8 +1,8 @@
 'use strict';
 
-clientApp.component('user', {
+clientApp.component('client', {
 
-    controller: function UserCtrl($scope, socket) {
+    controller: function ClientCtrl($scope, socket) {
         $scope.common = $scope.$parent.common;
         $scope.user = null;
 
@@ -30,6 +30,6 @@ clientApp.component('user', {
         });
     },
 
-    templateUrl: './src/User/User.html'
+    templateUrl: './src/Client/Client.html'
 
 });
