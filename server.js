@@ -93,7 +93,12 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
                         cost: dish.cost,
                         client_id: socket.user._id
                     })
-                    .then(console.log)
+                    .then(res => {
+                        nskitchen.clients((error, clients) => {
+                            if (error) throw error;
+                            clients.forEach(client => nskitchen.to(client).emit('order', res));
+                        });
+                    })
                     .then(() => Client.findOne({ email: socket.user.email }))
                     .then(user => {
                         user.balance -= dish.cost;

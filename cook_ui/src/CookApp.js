@@ -19,6 +19,8 @@ const cookApp =
                 const dish = $scope.common.orders.find(item => item._id === data._id);
                 if (dish) {
                     dish.status = data.status;
+                } else {
+                    $scope.common.orders.push(data);
                 }
             })
         });
