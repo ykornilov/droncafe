@@ -22,13 +22,4 @@ const ClientSchema = new Schema({
     }
 });
 
-//const ClientSchema = new Schema({
-//    name: String,
-//    email: String,
-//    balance: {
-//        type: Number,
-//        default: 100
-//    }
-//});
-
 module.exports = ClientSchema;
