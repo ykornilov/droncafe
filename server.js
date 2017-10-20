@@ -16,8 +16,8 @@ app.use('/client', express.static('client_ui'));
 app.use('/kitchen', express.static('cook_ui'));
 
 // Define namespaces for klient_ui and cook_ui
-const cook = io.of('/kitchen');
-const user = io.of('/client');
+const nscook = io.of('/kitchen');
+const nsclient = io.of('/client');
 
 mongoose.connect('mongodb://localhost:27017/droncafe', {
         useMongoClient: true
@@ -29,25 +29,30 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
         const ClientSchema = require('./app/models/client');
         const Client = mongoose.model('Client', ClientSchema);
 
+        const DishSchema = require('./app/models/dish');
+        //DishSchema.post('save', function(doc) {
+        //    console.log('%s has been saved', doc._id);
+        //});
+        const Dish = mongoose.model('Dish', DishSchema);
 
-        user.on('connection', socket => {
+        nsclient.on('connection', socket => {
             console.log('a client connection');
 
-            socket.on('login', client => {
-                if (client.email === null) {
+            socket.on('login', user => {
+                if (user.email === null) {
                     return;
                 }
                 Client.findOneAndUpdate({
-                        email: client.email
+                        email: user.email
                     }, {
-                        $set: {name: client.name},
-                        $setOnInsert: {email: client.email}
+                        $set: {name: user.name},
+                        $setOnInsert: {email: user.email}
                     }, {
                         upsert: true,
                         setDefaultsOnInsert: true
                     })
                     .exec()
-                    .then(() => Client.findOne({email: client.email}))
+                    .then(() => Client.findOne({email: user.email}))
                     .then(res => {
                         socket.user = res;
                         socket.emit('auth', res);
@@ -58,9 +63,9 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
             socket.on('incBalance', () => {
                 Client.findOne({ email: socket.user.email })
                     .exec()
-                    .then(client => {
-                        client.balance += 100;
-                        return client.save();
+                    .then(user => {
+                        user.balance += 100;
+                        return user.save();
                     })
                     .then(res => socket.emit('changeBalance', res.balance))
                     .catch(console.log);
@@ -74,19 +79,38 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
                     .catch(console.log);
             });
 
-            socket.on('addOrder', dish => {
-                Client.findOne({ email: socket.user.email })
+            socket.on('getOrders', () => {
+                Dish.find({ client_id: new mongoose.Types.ObjectId(socket.user._id) })
                     .exec()
-                    .then(client => {
-                        client.balance -= dish.cost;
-                        return client.save();
+                    .then(res => socket.emit('orders', res))
+                    .catch(console.log);
+            });
+
+            socket.on('newOrder', dish => {
+                //nsclient.clients((error, clients) => {
+                //    if (error) throw error;
+                //    const user = nsclient.connected[clients[0]].user;
+                //    console.log(user);
+                //    nsclient.to(clients[0]).emit('changeBalance', 100);
+                //});
+
+                Dish.create({
+                        title: dish.title,
+                        cost: dish.cost,
+                        client_id: socket.user._id
+                    })
+                    .then(console.log)
+                    .then(() => Client.findOne({ email: socket.user.email }))
+                    .then(user => {
+                        user.balance -= dish.cost;
+                        return user.save();
                     })
                     .then(res => socket.emit('changeBalance', res.balance))
                     .catch(console.log);
             });
         });
 
-        cook.on('connection', socket => {
+        nscook.on('connection', socket => {
             console.log('a cook connection');
         });
 

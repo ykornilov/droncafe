@@ -28,5 +28,6 @@ const clientApp =
 
             $scope.$on('auth', (event, data) => {
                 $scope.common.user = data;
+                $scope.$broadcast('userReady');
             });
         });

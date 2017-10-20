@@ -6,15 +6,14 @@ clientApp.component('menu', {
         $scope.menu = [];
         $scope.common = $scope.$parent.common;
 
-        $scope.addOrder = function(dish) {
-            socket.emit('addOrder', dish);
+        $scope.newOrder = function(dish) {
+            socket.emit('newOrder', dish);
         };
 
         socket.emit('getMenu');
 
         socket.on('menu', data => {
             $scope.menu = data;
-            console.log(data);
         });
     },
 

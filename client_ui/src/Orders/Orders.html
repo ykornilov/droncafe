@@ -1,0 +1,7 @@
+<ul ng-if="common.user">
+    <li ng-repeat="order in orders">
+        <h3>{{ order.title }}</h3>
+        <p>{{ order.cost }}</p>
+        <p>{{ order.status }}</p>
+    </li>
+</ul>
