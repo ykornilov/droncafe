@@ -24,6 +24,10 @@ clientApp.component('orders', {
                 dish.status = data.status;
             }
         });
+
+        socket.on('remove', data => {
+            $scope.orders = $scope.orders.filter(item => item._id !== data._id);
+        })
     },
 
     templateUrl: './src/Orders/Orders.html'

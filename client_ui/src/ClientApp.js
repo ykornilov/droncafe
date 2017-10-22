@@ -19,15 +19,16 @@ const clientApp =
         })
         .controller('MainCtrl', $scope => {
             $scope.common = {};
-            $scope.common.balance = 0;
             $scope.common.user = null;
 
-            $scope.$on('balance', (event, data) => {
-                $scope.common.balance = parseInt(data);
+            $scope.$on('client', (event, data) => {
+                $scope.common.user = data;
             });
 
             $scope.$on('auth', (event, data) => {
                 $scope.common.user = data;
-                $scope.$broadcast('userReady');
+                if ($scope.common.user) {
+                    $scope.$broadcast('userReady');
+                }
             });
         });

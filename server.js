@@ -1,7 +1,6 @@
 const menu = require('./app/src/menu');
+const netologyFakeDroneApi = require('./app/src/netology-fake-drone-api');
 
-//menu.read()
-//    .then(console.log);
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
@@ -27,12 +26,35 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
         console.log('Connected to database');
 
         const ClientSchema = require('./app/models/client');
+        ClientSchema.post('save', function(client) {
+            sendToClient(client._id, 'client', client);
+        });
         const Client = mongoose.model('Client', ClientSchema);
 
         const DishSchema = require('./app/models/dish');
-        //DishSchema.post('save', function(doc) {
-        //    console.log('%s has been saved', doc._id);
-        //});
+        DishSchema.post('save', function(dish) {
+            sendToClient(dish.client_id, 'order', dish);
+
+            switch (dish.status) {
+                case 0:
+                case 1:
+                    sendToCooks('order', dish);
+                    break;
+                case 2:
+                    sendToCooks('order', dish);
+                    deliverDish(dish);
+                    break;
+                case 3:
+                case 4:
+                    setTimeout(function() {
+                        dish.remove();
+                    }, 120000);
+                    break;
+            }
+        });
+        DishSchema.post('remove', function(dish) {
+            sendToClient(dish.client_id, 'remove', dish);
+        });
         const Dish = mongoose.model('Dish', DishSchema);
 
         nsclient.on('connection', socket => {
@@ -67,7 +89,6 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
                         user.balance += 100;
                         return user.save();
                     })
-                    .then(res => socket.emit('changeBalance', res.balance))
                     .catch(console.log);
             });
 
@@ -87,24 +108,16 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
             });
 
             socket.on('newOrder', dish => {
-
                 Dish.create({
                         title: dish.title,
                         cost: dish.cost,
                         client_id: socket.user._id
-                    })
-                    .then(res => {
-                        nskitchen.clients((error, clients) => {
-                            if (error) throw error;
-                            clients.forEach(client => nskitchen.to(client).emit('order', res));
-                        });
                     })
                     .then(() => Client.findOne({ email: socket.user.email }))
                     .then(user => {
                         user.balance -= dish.cost;
                         return user.save();
                     })
-                    .then(res => socket.emit('changeBalance', res.balance))
                     .catch(console.log);
             });
         });
@@ -126,25 +139,44 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
                         dish.status = status;
                         return dish.save();
                     })
-                    .then(res => {
-                        nskitchen.clients((error, clients) => {
-                            if (error) throw error;
-                            clients.forEach(client => nskitchen.to(client).emit('order', res));
-                        });
-                        return res;
-                    })
-                    .then(res => {
-                        nsclient.clients((error, clients) => {
-                            if (error) throw error;
-                            const client = clients.find(client => nsclient.connected[client].user._id.toString() === res.client_id.toString());
-                            if (client) {
-                                nsclient.to(client).emit('order', res);
-                            }
-                        });
-                    })
                     .catch(console.log);
             });
         });
+
+        function deliverDish(dish) {
+            Client.findOne({ _id: dish.client_id })
+                .then(client => netologyFakeDroneApi.deliver(client, dish))
+                .then(({client, dish}) => {
+                    dish.save();
+                })
+                .catch(({client, dish}) => {
+                    dish.save();
+                    client.save();
+                })
+        }
+
+        function sendToCooks(eventName, data) {
+            nskitchen.clients((error, socketsID) => {
+                if (error) throw error;
+                socketsID.forEach(socketID => {
+                    const socket = nskitchen.to(socketID);
+                    socket.emit(eventName, data);
+                });
+            });
+        }
+
+        function sendToClient(clientId, eventName, data) {
+            nsclient.clients((error, socketsID) => {
+                if (error) throw error;
+                const socketID = socketsID.find(socketID => {
+                    const socket = nsclient.connected[socketID];
+                    return socket.user && socket.user._id.toString() === clientId.toString();
+                });
+                if (socketID) {
+                    nsclient.to(socketID).emit(eventName, data);
+                }
+            });
+        }
 
     })
     .catch(console.log);
