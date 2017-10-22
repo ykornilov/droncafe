@@ -5,6 +5,8 @@
   <meta charset="utf-8">
   <title>Интерфейс клиента</title>
   <link rel="stylesheet" href="node_modules/html5-boilerplate/dist/css/normalize.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="node_modules/materialize-css/dist/css/materialize.min.css">
   <script src="./js/socket.io.js"></script>
   <script src="./node_modules/angular/angular.js"></script>
   <script src="./node_modules/angular-messages/angular-messages.js"></script>
@@ -14,9 +16,13 @@
 
 <body ng-controller="MainCtrl">
 
-  <client></client>
-  <ng-view></ng-view>
+  <div class="container">
+    <client></client>
+    <ng-view></ng-view>
+  </div>
 
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="node_modules/materialize-css/dist/js/materialize.min.js"></script>
   <script src="src/ClientApp.js"></script>
   <script src="src/ClientService/ClientService.js"></script>
   <script src="src/Client/ClientComponent.js"></script>

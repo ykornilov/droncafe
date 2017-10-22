@@ -1,6 +1,7 @@
-<ul>
-    <li ng-repeat="order in common.orders | filter: {status: 1}">
-        <h3>{{ order.title }}</h3>
-        <button ng-click="readyDish(order)">Готово</button>
+<ul class="collection with-header">
+    <li class="collection-header"><h4>Готовящиеся блюда</h4></li>
+    <li class="collection-item avatar" ng-repeat="order in common.orders | filter: {status: 1}">
+        <h5>{{ order.title }}</h5>
+        <button class="secondary-content btn waves-effect waves-light" ng-click="readyDish(order)">Готово</button>
     </li>
 </ul>

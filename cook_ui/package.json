@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "angular": "^1.6.6",
-    "html5-boilerplate": "^6.0.1"
+    "html5-boilerplate": "^6.0.1",
+    "materialize-css": "^0.100.2"
   }
 }

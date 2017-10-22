@@ -1,7 +1,8 @@
-<ul ng-if="common.user">
-    <li ng-repeat="order in orders">
-        <h3>{{ order.title }}</h3>
-        <p>{{ order.cost }}</p>
+<ul class="collection with-header" ng-if="common.user">
+    <li class="collection-header"><h4>Заказы</h4></li>
+    <li class="collection-item avatar" ng-repeat="order in orders">
+        <h5>{{ order.title }}</h5>
+        <p>Цена {{ order.cost }}у.е.</p>
         <div ng-switch="order.status">
             <p ng-switch-when="0">Заказано</p>
             <p ng-switch-when="1">Готовится</p>

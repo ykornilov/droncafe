@@ -5,6 +5,8 @@
   <meta charset="utf-8">
   <title>Интерфейс повара</title>
   <link rel="stylesheet" href="node_modules/html5-boilerplate/dist/css/normalize.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="node_modules/materialize-css/dist/css/materialize.min.css">
   <script src="./js/socket.io.js"></script>
   <script src="./node_modules/angular/angular.js"></script>
   <script src="./bower_components/angular-socket-io/socket.js"></script>
@@ -12,14 +14,23 @@
 
 <body ng-controller="MainCtrl">
 
-<new-orders></new-orders>
-<hr/>
-<cooking-orders></cooking-orders>
+  <div class="container">
+    <div class="row">
+      <div class="col s6">
+        <new-orders></new-orders>
+      </div>
+      <div class="col s6">
+        <cooking-orders></cooking-orders>
+      </div>
+    </div>
+  </div>
 
-<script src="src/CookApp.js"></script>
-<script src="src/CookService/CookService.js"></script>
-<script src="src/NewOrders/NewOrdersComponent.js"></script>
-<script src="src/CookingOrders/CookingOrdersComponent.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="node_modules/materialize-css/dist/js/materialize.min.js"></script>
+  <script src="src/CookApp.js"></script>
+  <script src="src/CookService/CookService.js"></script>
+  <script src="src/NewOrders/NewOrdersComponent.js"></script>
+  <script src="src/CookingOrders/CookingOrdersComponent.js"></script>
 
 </body>
 

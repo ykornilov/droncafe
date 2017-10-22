@@ -1,33 +1,57 @@
-<style>
-    .ng-dirty.ng-invalid {
-        border-color: #FA787E;
-    }
+<div class="row">
+    <form name="userForm" ng-if="!common.user" novalidate>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="name" name="name" type="text" class="validate" ng-model="user.name" required>
+                <label for="name">Имя</label>
+            </div>
+        </div>
+        <!--<input type="text" name="name" placeholder="Your name" ng-model="user.name" required ng-minlength="3"/>-->
+        <div class="row">
+            <div class="col s12" role="alert" ng-messages="userForm.name.$error" ng-if="userForm.name.$dirty">
+                <div ng-message="required" class="alert alert-danger">Необходимо ввести имя</div>
+            </div>
+        </div>
 
-    .ng-dirty.ng-valid {
-        border-color: #78FA89;
-    }
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="email" name="email" type="email" class="validate" ng-model="user.email" required ng-pattern="/^(\w)+@(\w)+\.(\w)+$/">
+                <label for="email">Email</label>
+            </div>
+        </div>
+        <!--<input type="text" name="email" placeholder="Your email" ng-model="user.email" required ng-pattern="/^(\w)+@(\w)+\.(\w)+$/"/>-->
+        <div class="row">
+            <div class="col s12" role="alert" ng-messages="userForm.email.$error" ng-if="userForm.email.$dirty">
+                <div ng-message="required" class="alert alert-danger">Необходимо указать email</div>
+                <div ng-message="pattern" class="alert alert-danger">Это значение не похоже на email</div>
+            </div>
+        </div>
 
-</style>
+        <div class="row">
+            <div class="col s2">
+                <button class="btn waves-effect waves-light" ng-click="authUser(user)" ng-disabled="userForm.$invalid">Login</button>
+            </div>
+        </div>
+    </form>
+</div>
 
-<form name="userForm" ng-if="!common.user" novalidate>
-    <input type="text" name="name" placeholder="Your name" ng-model="user.name" required ng-minlength="3"/>
-    <div role="alert" ng-messages="userForm.name.$error" ng-if="userForm.name.$dirty">
-        <div ng-message="required" class="alert alert-danger">Необходимо ввести имя</div>
-        <div ng-message="minlength" class="alert alert-danger">Имя слишком короткое</div>
+<div class="row" ng-if="common.user">
+    <div class="col s12 m6">
+        <div class="card">
+            <div class="card-content">
+                <p><span class="card-title">{{ common.user.email }}</span></p>
+                <p>{{ common.user.name }}</p>
+                <p>Баланс: {{ common.user.balance }}у.е. </p>
+                <button class="btn waves-effect waves-light" ng-click="incBalance()">Пополнить</button>
+            </div>
+            <div class="card-action">
+                <a href="#!/menu">Меню</a>
+                <a href="#!/">Заказы</a>
+            </div>
+        </div>
     </div>
-
-    <input type="text" name="email" placeholder="Your email" ng-model="user.email" required ng-pattern="/^(\w)+@(\w)+\.(\w)+$/"/>
-    <div role="alert" ng-messages="userForm.email.$error" ng-if="userForm.email.$dirty">
-        <div ng-message="required" class="alert alert-danger">Необходимо указать email</div>
-        <div ng-message="pattern" class="alert alert-danger">Это значение не похоже на email</div>
-    </div>
-
-    <button ng-click="authUser(user)" ng-disabled="userForm.$invalid">Login</button>
-</form>
-
-<div ng-if="common.user">
-    {{ common.user.name }}
-    {{ common.user.email }}
-    {{ common.user.balance }}
-    <button ng-click="incBalance()">Пополнить</button>
+    <!--{{ common.user.name }}-->
+    <!--{{ common.user.email }}-->
+    <!--{{ common.user.balance }}-->
+    <!--<button ng-click="incBalance()">Пополнить</button>-->
 </div>
