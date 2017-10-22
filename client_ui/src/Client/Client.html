@@ -1,7 +1,28 @@
-<form ng-if="!common.user">
-    <input type="text" name="name" placeholder="Your name" ng-model="user.name"/>
-    <input type="text" name="email" placeholder="Your email" ng-model="user.email"/>
-    <button ng-click="authUser(user)">Login</button>
+<style>
+    .ng-dirty.ng-invalid {
+        border-color: #FA787E;
+    }
+
+    .ng-dirty.ng-valid {
+        border-color: #78FA89;
+    }
+
+</style>
+
+<form name="userForm" ng-if="!common.user" novalidate>
+    <input type="text" name="name" placeholder="Your name" ng-model="user.name" required ng-minlength="3"/>
+    <div role="alert" ng-messages="userForm.name.$error" ng-if="userForm.name.$dirty">
+        <div ng-message="required" class="alert alert-danger">Необходимо ввести имя</div>
+        <div ng-message="minlength" class="alert alert-danger">Имя слишком короткое</div>
+    </div>
+
+    <input type="text" name="email" placeholder="Your email" ng-model="user.email" required ng-pattern="/^(\w)+@(\w)+\.(\w)+$/"/>
+    <div role="alert" ng-messages="userForm.email.$error" ng-if="userForm.email.$dirty">
+        <div ng-message="required" class="alert alert-danger">Необходимо указать email</div>
+        <div ng-message="pattern" class="alert alert-danger">Это значение не похоже на email</div>
+    </div>
+
+    <button ng-click="authUser(user)" ng-disabled="userForm.$invalid">Login</button>
 </form>
 
 <div ng-if="common.user">

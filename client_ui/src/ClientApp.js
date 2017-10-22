@@ -3,6 +3,7 @@ const clientApp =
     angular
         .module('ClientApp', [
             'ngRoute',
+            'ngMessages',
             'btford.socket-io'
         ])
         .config($routeProvider => {

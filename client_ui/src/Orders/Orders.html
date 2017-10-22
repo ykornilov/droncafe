@@ -2,6 +2,12 @@
     <li ng-repeat="order in orders">
         <h3>{{ order.title }}</h3>
         <p>{{ order.cost }}</p>
-        <p>{{ order.status }}</p>
+        <div ng-switch="order.status">
+            <p ng-switch-when="0">Заказано</p>
+            <p ng-switch-when="1">Готовится</p>
+            <p ng-switch-when="2">Доставляется</p>
+            <p ng-switch-when="3">Возникли сложности</p>
+            <p ng-switch-when="4">Подано</p>
+        </div>
     </li>
 </ul>
