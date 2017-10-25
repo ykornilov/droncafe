@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "ykornilov",
   "license": "ISC",
   "dependencies": {
@@ -14,5 +11,12 @@
     "angular-route": "^1.6.6",
     "html5-boilerplate": "^6.0.1",
     "materialize-css": "^0.100.2"
+  },
+  "devDependencies": {
+    "bower": "^1.8.2"
+  },
+  "scripts": {
+    "postinstall": "bower install",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

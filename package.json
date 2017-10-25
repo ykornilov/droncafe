@@ -3,15 +3,28 @@
   "version": "1.0.0",
   "description": "exam in the course ND-7",
   "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
   "author": "ykornilov",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.2",
     "mongoose": "^4.12.3",
     "socket.io": "^2.0.3"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "cyrillic-to-translit-js": "^1.0.6",
+    "mocha": "^4.0.1",
+    "mongo-clean": "^1.2.2",
+    "protractor": "^5.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "webdriver-update": "webdriver-manager update",
+    "prewebdriver-start": "npm run webdriver-update",
+    "webdriver-start": "webdriver-manager start",
+    "pree2e": "npm run webdriver-update",
+    "e2e": "protractor"
   }
 }
