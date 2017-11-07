@@ -1,0 +1,52 @@
+{{$ctrl.data}}
+<div class="row" ng-if="!$ctrl.clientData">
+    <form name="userForm" novalidate>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="name" name="name" type="text" class="validate" ng-model="$ctrl.user.name" required>
+                <label for="name">Имя</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12" role="alert" ng-messages="userForm.name.$error" ng-if="userForm.name.$dirty">
+                <div ng-message="required" class="alert alert-danger">Необходимо ввести имя</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="email" name="email" type="email" class="validate" ng-model="$ctrl.user.email" required ng-pattern="/^(\w)+@(\w)+\.(\w)+$/">
+                <label for="email">Email</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12" role="alert" ng-messages="userForm.email.$error" ng-if="userForm.email.$dirty">
+                <div ng-message="required" class="alert alert-danger">Необходимо указать email</div>
+                <div ng-message="pattern" class="alert alert-danger">Это значение не похоже на email</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s2">
+                <button class="btn waves-effect waves-light" ng-click="$ctrl.authUser()" ng-disabled="userForm.$invalid">Login</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row" ng-if="$ctrl.clientData">
+    <div class="col s12 m6">
+        <div class="card">
+            <div class="card-content">
+                <p><span class="card-title">{{ $ctrl.clientData.email }}</span></p>
+                <p>{{ $ctrl.clientData.name }}</p>
+                <p>Баланс: {{ $ctrl.clientData.balance }}у.е. </p>
+                <button class="btn waves-effect waves-light" ng-click="$ctrl.incBalance()">Пополнить</button>
+            </div>
+            <div class="card-action">
+                <a href="#!/menu">Меню</a>
+                <a href="#!/">Заказы</a>
+            </div>
+        </div>
+    </div>
+</div>

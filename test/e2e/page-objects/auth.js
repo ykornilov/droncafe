@@ -8,11 +8,11 @@ class AuthForm {
     }
 
     get name() {
-        return element(by.model('user.name'));
+        return element(by.model('$ctrl.user.name'));
     }
 
     get email() {
-        return element(by.model('user.email'));
+        return element(by.model('$ctrl.user.email'));
     }
 
     get submitBtn() {

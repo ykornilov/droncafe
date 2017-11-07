@@ -1,0 +1,6 @@
+<ul class="collection with-header">
+    <li class="collection-header"><h4>Готовящиеся блюда</h4></li>
+    <li class="collection-item avatar" ng-repeat="order in $ctrl.orders | filter: {status: 1}">
+        <cooking-order dish="order" on-change-status="$ctrl.changeStatus(dish)"></cooking-order>
+    </li>
+</ul>

@@ -1,0 +1,6 @@
+<ul class="collection with-header" ng-if="$ctrl.clientData">
+    <li class="collection-header"><h4>Меню</h4></li>
+    <li class="collection-item avatar" ng-repeat="dish in $ctrl.menu">
+        <menu-item client-data="$ctrl.clientData" dish="dish" to-order="$ctrl.newOrder(dish)"></menu-item>
+    </li>
+</ul>

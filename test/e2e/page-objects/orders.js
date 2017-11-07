@@ -8,11 +8,11 @@ class Orders {
     }
 
     get firstOrderStatus() {
-        return this.firstOrder.$('div').$('p');
+        return this.firstOrder.$('.order-status').$('p');
     }
 
     getList() {
-        return element.all(by.repeater('order in orders'));
+        return element.all(by.repeater('order in $ctrl.orders'));
     }
 
 }

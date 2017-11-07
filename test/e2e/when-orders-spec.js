@@ -66,7 +66,7 @@ describe('Testing work with orders', function() {
                 .then(text => expect(text).to.equal('Заказано'));
         });
 
-        it('Testing order status after begin of cooking', function(){
+        it('Testing order status after begin of cookingorders', function(){
             loginKitchen();
             kitchen.newOrdersFirstBtn.click();
             loginClient(name);
@@ -76,7 +76,7 @@ describe('Testing work with orders', function() {
                 .then(text => expect(text).to.equal('Готовится'));
         });
 
-        it('Testing order status after end of cooking', function(){
+        it('Testing order status after end of cookingorders', function(){
             loginKitchen();
             kitchen.newOrdersFirstBtn.click();
             kitchen.cookingOrdersFirstBtn.click();
@@ -103,21 +103,21 @@ describe('Testing work with orders', function() {
             expect(kitchen.newOrdersLength).eventually.to.equal(2);
         });
 
-        it('Testing removing order from list of new orders to cooking orders: list of new orders', function(){
+        it('Testing removing order from list of new orders to cookingorders orders: list of new orders', function(){
             kitchen = new Kitchen();
             kitchen.get();
             kitchen.newOrdersFirstBtn.click();
             expect(kitchen.newOrdersLength).eventually.to.equal(1);
         });
 
-        it('Testing removing order from list of new orders to cooking orders: list of cooking orders', function(){
+        it('Testing removing order from list of new orders to cookingorders orders: list of cookingorders orders', function(){
             kitchen = new Kitchen();
             kitchen.get();
             kitchen.newOrdersFirstBtn.click();
             expect(kitchen.cookingOrdersLength).eventually.to.equal(1);
         });
 
-        it('Testing removing order from list of cooking orders', function(){
+        it('Testing removing order from list of cookingorders orders', function(){
             kitchen = new Kitchen();
             kitchen.get();
             kitchen.newOrdersFirstBtn.click();

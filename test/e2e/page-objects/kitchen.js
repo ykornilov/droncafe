@@ -20,7 +20,7 @@ class Kitchen {
     }
 
     getNewOrdersList() {
-        return element.all(by.repeater('order in common.orders | filter: {status: 0}'));
+        return element.all(by.repeater('order in $ctrl.orders | filter: {status: 0}'));
     }
 
 
@@ -37,7 +37,7 @@ class Kitchen {
     }
 
     getCookingOrdersList() {
-        return element.all(by.repeater('order in common.orders | filter: {status: 1}'));
+        return element.all(by.repeater('order in $ctrl.orders | filter: {status: 1}'));
     }
 }
 

@@ -9,30 +9,36 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
+const mongoUri = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/droncafe';
 
 // Routing
 app.use('/client', express.static('client_ui'));
 app.use('/kitchen', express.static('cook_ui'));
 
-// Define namespaces for klient_ui and cook_ui
+app.get('/', (req, res) => {
+    res.redirect('/client');
+});
+
+// Define namespaces for client_ui and cook_ui
 const nskitchen = io.of('/kitchen');
 const nsclient = io.of('/client');
 
-mongoose.connect('mongodb://localhost:27017/droncafe', {
+mongoose.connect(mongoUri, {
         useMongoClient: true
         /* other options */
     })
     .then(db => {
         console.log('Connected to database');
 
+        //---------ODM-----------------------------------------
         const ClientSchema = require('./app/models/client');
-        ClientSchema.post('save', function(client) {
+        ClientSchema.post('save', client => {
             sendToClient(client._id, 'client', client);
         });
         const Client = mongoose.model('Client', ClientSchema);
 
         const DishSchema = require('./app/models/dish');
-        DishSchema.post('save', function(dish) {
+        DishSchema.post('save', dish => {
             sendToClient(dish.client_id, 'order', dish);
 
             switch (dish.status) {
@@ -52,11 +58,48 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
                     break;
             }
         });
-        DishSchema.post('remove', function(dish) {
+        DishSchema.post('remove', dish => {
             sendToClient(dish.client_id, 'remove', dish);
         });
         const Dish = mongoose.model('Dish', DishSchema);
 
+        function deliverDish(dish) {
+            Client.findOne({ _id: dish.client_id })
+                .then(client => netologyFakeDroneApi.deliver(client, dish))
+                .then(({client, dish}) => {
+                    dish.save();
+                })
+                .catch(({client, dish}) => {
+                    dish.save();
+                    client.save();
+                })
+        }
+
+        function sendToCooks(eventName, data) {
+            nskitchen.clients((error, socketsID) => {
+                if (error) throw error;
+                socketsID.forEach(socketID => {
+                    const socket = nskitchen.to(socketID);
+                    socket.emit(eventName, data);
+                });
+            });
+        }
+
+        function sendToClient(clientId, eventName, data) {
+            nsclient.clients((error, socketsID) => {
+                if (error) throw error;
+                const socketID = socketsID.find(socketID => {
+                    const socket = nsclient.connected[socketID];
+                    return socket.user && socket.user._id.toString() === clientId.toString();
+                });
+                if (socketID) {
+                    nsclient.to(socketID).emit(eventName, data);
+                }
+            });
+        }
+        //----------End of ODM--------------------------------------
+
+        //----------Client protocol---------------------------------
         nsclient.on('connection', socket => {
             console.log('a client connection');
 
@@ -121,7 +164,9 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
                     .catch(console.log);
             });
         });
+        //-------------------End of Client protocol---------------------------
 
+        //-------------------Kitchen protocol---------------------------------
         nskitchen.on('connection', socket => {
             console.log('a cook connection');
 
@@ -142,41 +187,7 @@ mongoose.connect('mongodb://localhost:27017/droncafe', {
                     .catch(console.log);
             });
         });
-
-        function deliverDish(dish) {
-            Client.findOne({ _id: dish.client_id })
-                .then(client => netologyFakeDroneApi.deliver(client, dish))
-                .then(({client, dish}) => {
-                    dish.save();
-                })
-                .catch(({client, dish}) => {
-                    dish.save();
-                    client.save();
-                })
-        }
-
-        function sendToCooks(eventName, data) {
-            nskitchen.clients((error, socketsID) => {
-                if (error) throw error;
-                socketsID.forEach(socketID => {
-                    const socket = nskitchen.to(socketID);
-                    socket.emit(eventName, data);
-                });
-            });
-        }
-
-        function sendToClient(clientId, eventName, data) {
-            nsclient.clients((error, socketsID) => {
-                if (error) throw error;
-                const socketID = socketsID.find(socketID => {
-                    const socket = nsclient.connected[socketID];
-                    return socket.user && socket.user._id.toString() === clientId.toString();
-                });
-                if (socketID) {
-                    nsclient.to(socketID).emit(eventName, data);
-                }
-            });
-        }
+        //----------------End of Kitchen protocol--------------------------
 
     })
     .catch(console.log);

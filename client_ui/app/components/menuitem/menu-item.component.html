@@ -1,0 +1,6 @@
+<div>
+    <h5>{{ $ctrl.dish.title }}</h5>
+    <p>Цена: {{ $ctrl.dish.cost }}у.е.</p>
+    <p ng-if="$ctrl.dish.cost > $ctrl.clientData.balance">Пополните баланс на {{ $ctrl.dish.cost - $ctrl.clientData.balance }}у.е.</p>
+    <button class="secondary-content btn waves-effect waves-light" ng-if="$ctrl.dish.cost <= $ctrl.clientData.balance" ng-click="$ctrl.order()">Заказать</button>
+</div>

@@ -16,7 +16,7 @@ class Menu {
     }
 
     getList() {
-        return element.all(by.repeater('dish in menu'));
+        return element.all(by.repeater('dish in $ctrl.menu'));
     }
 
 }

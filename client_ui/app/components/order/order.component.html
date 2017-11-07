@@ -1,0 +1,11 @@
+<div>
+    <h5>{{ $ctrl.dish.title }}</h5>
+    <p>Цена {{ $ctrl.dish.cost }}у.е.</p>
+    <div class="order-status" ng-switch="$ctrl.dish.status">
+        <p ng-switch-when="0">Заказано</p>
+        <p ng-switch-when="1">Готовится</p>
+        <p ng-switch-when="2">Доставляется</p>
+        <p ng-switch-when="3">Возникли сложности</p>
+        <p ng-switch-when="4">Подано</p>
+    </div>
+</div>

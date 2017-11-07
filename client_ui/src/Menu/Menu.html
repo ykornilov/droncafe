@@ -1,9 +1,0 @@
-<ul class="collection with-header" ng-if="common.user">
-    <li class="collection-header"><h4>Меню</h4></li>
-    <li class="collection-item avatar" ng-repeat="dish in menu">
-        <h5>{{ dish.title }}</h5>
-        <p>Цена: {{ dish.cost }}у.е.</p>
-        <p ng-if="dish.cost > common.user.balance">Пополните баланс на {{ dish.cost - common.user.balance }}у.е.</p>
-        <button class="secondary-content btn waves-effect waves-light" ng-if="dish.cost <= common.user.balance" ng-click="newOrder(dish)">Заказать</button>
-    </li>
-</ul>

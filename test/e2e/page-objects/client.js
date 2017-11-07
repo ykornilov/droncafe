@@ -4,7 +4,7 @@ class Client {
     }
 
     getBalance() {
-        return element(by.binding('common.user.balance')).getText();
+        return element(by.binding('$ctrl.clientData.balance')).getText();
     }
 
     toMenu() {

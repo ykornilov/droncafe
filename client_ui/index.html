@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="ClientApp">
+<html ng-app="app">
 
 <head>
   <meta charset="utf-8">
@@ -7,27 +7,30 @@
   <link rel="stylesheet" href="node_modules/html5-boilerplate/dist/css/normalize.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="node_modules/materialize-css/dist/css/materialize.min.css">
-  <script src="./js/socket.io.js"></script>
-  <script src="./node_modules/angular/angular.js"></script>
-  <script src="./node_modules/angular-messages/angular-messages.js"></script>
-  <script src="./node_modules/angular-route/angular-route.js"></script>
-  <script src="./bower_components/angular-socket-io/socket.js"></script>
+  <script src="js/socket.io.js"></script>
+  <script src="node_modules/angular/angular.js"></script>
+  <script src="node_modules/angular-messages/angular-messages.js"></script>
+  <script src="node_modules/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-socket-io/socket.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="node_modules/materialize-css/dist/js/materialize.min.js"></script>
 </head>
 
-<body ng-controller="MainCtrl">
-
+<body ng-controller="MainCtrl as vm">
   <div class="container">
-    <client></client>
+    <client client-data="vm.user" on-change-data="vm.changeData(data)" on-disconnect="vm.disconnect()"></client>
     <ng-view></ng-view>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script src="node_modules/materialize-css/dist/js/materialize.min.js"></script>
-  <script src="src/ClientApp.js"></script>
-  <script src="src/ClientService/ClientService.js"></script>
-  <script src="src/Client/ClientComponent.js"></script>
-  <script src="src/Menu/MenuComponent.js"></script>
-  <script src="src/Orders/OrdersComponent.js"></script>
+  <script src="app/socketio.module.js"></script>
+  <script src="app/app.module.js"></script>
+  <script src="app/app.config.js"></script>
+  <script src="app/app.ctrl.js"></script>
+  <script src="app/components/client/client.component.js"></script>
+  <script src="app/components/menu/menu.component.js"></script>
+  <script src="app/components/menuitem/menu-item.component.js"></script>
+  <script src="app/components/orders/orders.component.js"></script>
+  <script src="app/components/order/order.component.js"></script>
 
 </body>
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="CookApp">
+<html ng-app="app">
 
 <head>
   <meta charset="utf-8">
@@ -7,30 +7,37 @@
   <link rel="stylesheet" href="node_modules/html5-boilerplate/dist/css/normalize.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="node_modules/materialize-css/dist/css/materialize.min.css">
-  <script src="./js/socket.io.js"></script>
-  <script src="./node_modules/angular/angular.js"></script>
-  <script src="./bower_components/angular-socket-io/socket.js"></script>
+  <script src="js/socket.io.js"></script>
+  <script src="node_modules/angular/angular.js"></script>
+  <script src="bower_components/angular-socket-io/socket.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="node_modules/materialize-css/dist/js/materialize.min.js"></script>
 </head>
 
-<body ng-controller="MainCtrl">
+<body ng-controller="MainCtrl as vm">
 
   <div class="container">
     <div class="row">
       <div class="col s6">
-        <new-orders></new-orders>
+        <new-orders orders="vm.orders" on-change="vm.changeOrderStatus(dish, 1)"></new-orders>
       </div>
       <div class="col s6">
-        <cooking-orders></cooking-orders>
+        <cooking-orders orders="vm.orders" on-change="vm.changeOrderStatus(dish, 2)"></cooking-orders>
       </div>
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script src="node_modules/materialize-css/dist/js/materialize.min.js"></script>
-  <script src="src/CookApp.js"></script>
-  <script src="src/CookService/CookService.js"></script>
-  <script src="src/NewOrders/NewOrdersComponent.js"></script>
-  <script src="src/CookingOrders/CookingOrdersComponent.js"></script>
+  <script src="app/socketio.module.js"></script>
+  <script src="app/app.module.js"></script>
+  <script src="app/app.ctrl.js"></script>
+  <script src="app/components/neworders/new-orders.component.js"></script>
+  <script src="app/components/neworder/new-order.component.js"></script>
+  <script src="app/components/cookingorders/cooking-orders.component.js"></script>
+  <script src="app/components/cookingorder/cooking-order.component.js"></script>
+  <!--<script src="src/CookApp.js"></script>-->
+  <!--<script src="src/CookService/CookService.js"></script>-->
+  <!--<script src="src/NewOrders/NewOrdersComponent.js"></script>-->
+  <!--<script src="src/CookingOrders/CookingOrdersComponent.js"></script>-->
 
 </body>
 
